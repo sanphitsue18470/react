@@ -1,3 +1,6 @@
+body{
+    background-color:pink ;
+}
 .card {
     display: inline-block;
     text-align: center;
@@ -9,6 +12,9 @@
    }
 
    .activeCard{
-       color: red;
-       background : pink;
+       color:blueviolet;
+       background :blue;
    }
+.textst{
+    text-align: center;
+}

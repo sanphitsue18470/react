@@ -1,48 +1,26 @@
-import React, { useState } from 'react';
-import CharacterCard from './CharacterCard';
+import React, { useState, useEffect, useRef } from "react";
+export default function CharacterCard(props) {
+  const [active, setActive] = useState(false);
+  const attemptRef = useRef(props.attempt);
 
-import _, { set, attempt } from 'lodash';
-    const prepareStateFromWord = (given_word) => {
-        let word = given_word.toUpperCase()
-        let chars = _.shuffle(Array.from(word))
-        return {
-            word,
-            chars,
-            attempt: 1,
-            guess: '',
-            completed: false
+  const activate = () => {
+    if (!active) {
+      setActive(true);
+      props.activationHandler(props.value);
     }
-}
+  };
 
-export default function WordCard(props){
-
-    const [state, setState] = useState(prepareStateFromWord(props.value))
-
-    const activationHandler = c => { 
-        console.log(`${c} has been activated.`) 
-
-        let guess = state.guess + c
-        setState({...state, guess})
-
-        if(guess.length == state.word.length){
-            if(guess == state.word){
-                console.log('yeah!')
-                setState({...state, completed: true})
-            }else{
-                console.log('reset, next attempt')
-                setState({...state, guess: '', attempt: state.attempt + 1})
-            }
-        }
+  useEffect(() => {
+    if (attemptRef.current != props.attempt) {
+      setActive(false);
+      attemptRef.current = props.attempt;
     }
+  });
 
-
-    return (
-        <div>
-            {
-                state.chars.map((c,i) => 
-                <CharacterCard value={c} key={i} activationHandler={activationHandler} attempt={state.attempt}/>
-                )
-            }
-        </div>
-    )
+  const className = `card ${active ? "activeCard" : ""}`;
+  return (
+    <div className={className} onClick={activate}>
+      {props.value}
+    </div>
+  );
 }
